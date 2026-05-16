@@ -9,7 +9,7 @@ import matter from "gray-matter";
 const embedder = ollama.embedding("nomic-embed-text");
 const model = ollama("llama3.2");
 
-const PROCESSED_DIR = "./data";
+const PROCESSED_DIR = "./data/processed";
 const INDEX_NAME = "chunks";
 const EMBEDDING_DIMENSION = 768;
 
@@ -121,36 +121,25 @@ function flattenMetadata(md: Record<string, any>): Record<string, string | numbe
   return flat;
 }
 
-// 5. Upsert
-await chroma.upsert({
-  indexName: INDEX_NAME,
-  vectors: goodVectors,
-  ids: goodIds,
-  metadata: goodMetadata,
-});
+const UPSERT_BATCH_SIZE = 100;
 
-console.log(`Done. Upserted ${goodVectors.length} vectors.`);
+console.log(`Upserting ${goodVectors.length} vectors in batches of ${UPSERT_BATCH_SIZE}...`);
 
-// example query
-const query = "I want to go for a walk";
-const { embedding } = await embed({ model: embedder, value: query });
+let upserted = 0;
+for (let i = 0; i < goodVectors.length; i += UPSERT_BATCH_SIZE) {
+  const end = Math.min(i + UPSERT_BATCH_SIZE, goodVectors.length);
+  try {
+    await chroma.upsert({
+      indexName: INDEX_NAME,
+      vectors: goodVectors.slice(i, end),
+      ids: goodIds.slice(i, end),
+      metadata: goodMetadata.slice(i, end),
+    });
+    upserted += (end - i);
+    console.log(`  upserted ${upserted}/${goodVectors.length}`);
+  } catch (e) {
+    console.error(`  batch ${i}-${end} failed: ${(e as Error).message}`);
+  }
+}
 
-// retrieve relevant chunks
-const results = await chroma.query({
-  indexName: INDEX_NAME,
-  queryVector: embedding,
-  topK: 5,
-});
-
-const contextText = results
-  .map((result) => result?.metadata?.text)
-  .join("\n\n");
-
-  const completion = await generateText({
-    model: model,
-    prompt: `Given the following context:\n\n${contextText}\n\n
-    Please answer the following question: ${query}\n\n
-    If the content lacks sufficiently, please state that explicitly. Do not make up answers.`,
-  })
-
-  console.log(completion.text);
+console.log(`Done. Upserted ${upserted} of ${goodVectors.length} vectors.`);
