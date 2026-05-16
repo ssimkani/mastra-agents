@@ -1,4 +1,7 @@
 import { Agent } from '@mastra/core/agent';
+import { ollama } from "ollama-ai-provider-v2";
+const model = ollama("llama3.2");
+
 import { Memory } from '@mastra/memory';
 import { weatherTool } from '../tools/weather-tool';
 import { scorers } from '../scorers/weather-scorer';
@@ -18,7 +21,7 @@ Your primary function is to help users get weather details for specific location
 - If the user asks for activities, respond in the format they request.
 
 Use the weatherTool to fetch current weather data.`,
-  model: 'mistral/mistral-medium-2508',
+  model: model,
   tools: { weatherTool },
   scorers: {
     toolCallAppropriateness: {

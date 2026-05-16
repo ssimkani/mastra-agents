@@ -17,18 +17,21 @@
     "node": ">=22.13.0"
   },
   "dependencies": {
+    "@mastra/chroma": "^1.0.1",
     "@mastra/core": "^1.35.0",
     "@mastra/duckdb": "^1.3.2",
     "@mastra/evals": "^1.2.2",
     "@mastra/libsql": "^1.11.0",
     "@mastra/loggers": "^1.1.1",
+    "@mastra/mcp": "^1.7.0",
     "@mastra/memory": "^1.18.2",
     "@mastra/observability": "^1.12.0",
+    "@mastra/rag": "^2.2.1",
     "ollama-ai-provider-v2": "^3.5.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@types/node": "^25.8.0",
+    "@types/node": "^22.19.19",
     "mastra": "^1.9.3",
     "typescript": "^6.0.3"
   }
