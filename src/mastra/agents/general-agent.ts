@@ -1,7 +1,7 @@
 import { Agent } from '@mastra/core/agent';
 import { ollama } from "ollama-ai-provider-v2";
 import { Memory } from '@mastra/memory';
-import { databaseTool } from '../tools/database-tool';
+import { ragTool } from '../tools/rag-tool';
 const model = ollama("llama3.2");
 
 export const generalAgent = new Agent({
@@ -14,6 +14,6 @@ export const generalAgent = new Agent({
   DO NOT CONSULT OUTSIDE SOURCES.
   `,
   model: model,
-  tools: { databaseTool },
+  tools: { ragTool },
   memory: new Memory(),
 });
