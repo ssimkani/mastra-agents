@@ -7,13 +7,16 @@ import { Observability, MastraStorageExporter, MastraPlatformExporter, Sensitive
 import { weatherWorkflow } from './workflows/weather-workflow';
 import { generalAgent } from './agents/general-agent';
 import { browserAgent } from './agents/browser-agent';
-import { ragTool } from './tools/rag-tool';
+import { supervisorAgent } from './agents/data-supervisor-agent'
 import { toolCallAppropriatenessScorer, completenessScorer, translationScorer } from './scorers/weather-scorer';
+import { dataAgent } from './agents/data-agent';
+import { vizAgent } from './agents/viz-agent';
+import { runPythonTool } from './tools/python-tool';
 
 export const mastra = new Mastra({
   workflows: { weatherWorkflow },
-  tools: { ragTool },
-  agents: { generalAgent, browserAgent },
+  tools: { runPythonTool },
+  agents: { generalAgent, browserAgent, supervisorAgent, dataAgent, vizAgent },
   scorers: { toolCallAppropriatenessScorer, completenessScorer, translationScorer },
   storage: new MastraCompositeStore({
     id: 'composite-storage',
