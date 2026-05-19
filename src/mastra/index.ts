@@ -8,15 +8,16 @@ import { weatherWorkflow } from './workflows/weather-workflow';
 import { generalAgent } from './agents/general-agent';
 import { browserAgent } from './agents/browser-agent';
 import { supervisorAgent } from './agents/data-supervisor-agent'
-import { toolCallAppropriatenessScorer, completenessScorer, translationScorer } from './scorers/weather-scorer';
 import { dataAgent } from './agents/data-agent';
 import { vizAgent } from './agents/viz-agent';
 import { runPythonTool } from './tools/python-tool';
+import { toolCallAppropriatenessScorer, completenessScorer, translationScorer } from './scorers/weather-scorer';
+import { gmailAgent } from './agents/gmail-agent';
 
 export const mastra = new Mastra({
   workflows: { weatherWorkflow },
   tools: { runPythonTool },
-  agents: { generalAgent, browserAgent, supervisorAgent, dataAgent, vizAgent },
+  agents: { generalAgent, browserAgent, supervisorAgent, dataAgent, vizAgent, gmailAgent },
   scorers: { toolCallAppropriatenessScorer, completenessScorer, translationScorer },
   storage: new MastraCompositeStore({
     id: 'composite-storage',
