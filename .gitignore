@@ -10,5 +10,5 @@ dist
 .vercel
 /data
 workspace
-src/mastra/public/mastra.duckdb
-src/mastra/public/mastra.duckdb.wal
+/src/mastra/public/mastra.duckdb
+/src/mastra/public/mastra.duckdb.wal
